@@ -1,6 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import paddlehub as hub
 import os
 
 def plt_show(img):
@@ -34,6 +35,10 @@ def pic_fetch(back_img,object_img,center_point,scale = 1):
     result = np.zeros_like(object_resize)
     result = back_img[height_min:height_max,width_min:width_max]
     return result
+
+def get_contour_outlines(img):
+    human_seg = hub.Module(name="humanseg_mobile")
+    pass
 
 if __name__ == "__main__":
     back = np.zeros((500,500),np.uint8)

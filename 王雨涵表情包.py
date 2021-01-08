@@ -7,7 +7,6 @@ def plt_show(img):
     imageRGB = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     plt.imshow(imageRGB)
     plt.show()
-
 face_contour = cv2.imread("pics_processed/wyh.jpg")
 face_contour = cv2.cvtColor(face_contour,cv2.COLOR_RGB2GRAY)
 #face_contour_binary 得到了汪雨涵的头像轮廓
