@@ -2,7 +2,7 @@ from Pigeon_utils import *
 
         #可以封装成 从一张图片抠出一个人来
 
-back = cv2.imread("my_emoji/wyhgezi2.0.jpg")
+back = cv2.imread("my_emoji/wyhgezi2.0_withouttext.jpg")
 #从图中获取目标
 
 
@@ -35,5 +35,6 @@ xx_back = pic_fetch(back,xx_contour,center_pts)
 
 emoji_box = embedding_face(xx_back,xx_person,xx_contour_horizontal,xx_contour_horizontal_inv)
 emoji = pic_insert(back,emoji_box,center_point=center_pts)
-cv2.imwrite("my_emoji/xxqigezi1.0.jpg",emoji)
-plt_show(emoji)
+# cv2.imwrite("my_emoji/xxqigezi1.0.jpg",emoji)
+emoji_ret = emoji_addtext(emoji,"我已经在路上了！")
+plt_show(emoji_ret)
