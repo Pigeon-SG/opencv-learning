@@ -36,6 +36,6 @@ xx_back = pic_fetch(back,xx_contour,center_pts)
 emoji_box = embedding_face(xx_back,xx_person,xx_contour_horizontal,xx_contour_horizontal_inv)
 emoji = pic_insert(back,emoji_box,center_point=center_pts)
 
-emoji_ret = emoji_addtext(emoji,"我已经在路上了！")
+emoji_ret = emoji_addtext(emoji,"")
 cv2.imwrite("my_emoji/xxqigezi1.1.jpg",emoji_ret)
 plt_show(emoji_ret)

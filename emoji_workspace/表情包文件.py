@@ -63,5 +63,5 @@ def emoji_addtext(emoji,text):
     plt_show(emoji_text)
     return emoji_text
 
-xx_face = emoji_addtext(emoji,"你愁啥")
-cv2.imwrite("pics_processed/xx_face.jpg",xx_face)
+xx_face = emoji_addtext(emoji,"晚上几点钟？")
+cv2.imwrite("my_emoji/xx_xm_face.jpg",xx_face)
