@@ -91,6 +91,22 @@ def pic_fetch(back_img,object_img,center_point,scale = 1):
     result = back_img[height_min:height_max,width_min:width_max]
     return result
 
+def pic_fetchbybox(back_img,box,center_point):
+    # 根据输入的捕获框box的大小，从对应图像（back_img）中获取对应位置（center_point）的图像
+    # box 坐标按照
+    #   0：左上角x坐标
+    #   1：左上角y坐标
+    #   2：右下角x坐标
+    #   3：右下角y坐标
+    # center_point 按照坐标 x,y
+    height_min = int(center_point[1] - (box[3] - box[1]) / 2)
+    height_max = int(center_point[1] + (box[3] - box[1]) / 2)
+    width_min = int(center_point[0] - (box[2] - box[0]) / 2)
+    width_max = int(center_point[0] + (box[2] - box[0]) / 2)
+
+    ret = back_img[height_min:height_max,width_min:width_max]
+    return ret
+
 matplotlib.use("TkAgg")
 
 def get_contour_outlines(img):
@@ -116,6 +132,32 @@ def add_textmargin(img,text):
     ret = np.vstack([img, padding])
     emoji = emoji_addtext(ret,text)
     return emoji
+
+def getandsave_humanseg(img,save_path):
+    human_seg = hub.Module(name="humanseg_mobile")
+    human_segmention = human_seg.segment(images=[img], visualization=False)
+    ret = human_segmention[0]["data"]
+    ret_thresh,img = cv2.threshold(ret,190,255,cv2.THRESH_BINARY)
+    cv2.imwrite(save_path,img)
+    return img
+
+def get_personfrompic(img_path):
+    person = cv2.imread(img_path)
+    object_detector = hub.Module(name='yolov3_resnet50_vd_coco2017')
+    result = object_detector.object_detection(images=[person], visualization=False)
+    box_coords = result[0]["data"]
+    # 存储了一张图片中一个人的坐标
+    box_person_coords = np.array([0, 0, 0, 0])
+    box_num = len(result[0]["data"])
+    for i in range(box_num):
+        if box_coords[i]["label"] == "person":
+            box_person_coords[0] = box_coords[i]['left']
+            box_person_coords[1] = box_coords[i]['top']
+            box_person_coords[2] = box_coords[i]['right']
+            box_person_coords[3] = box_coords[i]['bottom']
+    points = [(box_person_coords[2] + box_person_coords[0]) // 2, (box_person_coords[3] + box_person_coords[1]) // 2]
+    person_fetch = pic_fetchbybox(person, box_person_coords, points)
+    return person_fetch,box_person_coords,points
 
 if __name__ == "__main__":
     img = cv2.imread("pics/wyh.jpg")

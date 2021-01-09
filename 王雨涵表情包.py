@@ -1,7 +1,9 @@
 from Pigeon_utils import *
 img = cv2.imread("pics/wyh.jpg")
 img = pic_resizebytimes(img,1/6.0)
+print("img shape = ",img.shape)
 mask,mask_inv = get_contour_outlines(img)
+print("mask shape = ",mask_inv.shape)
 ret = stackImages(1,[[img,mask_inv,mask]])
 #取出合适大小的框
 back = cv2.imread("pics/pigeon.jpg")
