@@ -19,7 +19,7 @@ def emoji_addtext(emoji,text):
     text_anchor_x = (emoji.shape[1] - fsize[0])//2
     draw.text((text_anchor_x,text_anchor_y),text,font=font,fill=0)
     emoji_text = cv2.cvtColor(np.array(Pilimg),cv2.COLOR_RGB2BGR)
-    return emoji_text
+    return np.array(Pilimg)
 def stackImages(scale,imgArray):
     rows = len(imgArray)
     cols = len(imgArray[0])
