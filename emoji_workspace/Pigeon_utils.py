@@ -6,6 +6,8 @@ import paddlehub as hub
 
 from PIL import Image, ImageDraw, ImageFont
 import os
+def empty(a):
+    pass
 def emoji_addtext(emoji,text):
     # cv2 读取处理过的emoji图片
     Pilimg = Image.fromarray(emoji)
