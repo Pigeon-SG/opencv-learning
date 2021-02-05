@@ -15,6 +15,8 @@ import os
             按照处理目的来命名文件，例如在pics文件夹中是xx.jpg
                 人脸识别后 xx_face.jpg (pics_processed/xx_face.jpg)
                 人体分割后 xx_humanseg.jpg
+                
+    处理完后的图片用于 emoji_factory
 '''
 # matplotlib.use("TkAgg")
 
@@ -43,6 +45,7 @@ def get_face_and_pos(img):
     return img_face,pos
 
 def getproperyBinarythresh(img):
+    # 自己写的，感觉腐蚀和膨胀的效果不是很好
     cv2.namedWindow("bars")
     cv2.resizeWindow("bars", 640, 280)
     cv2.createTrackbar("Binary", "bars", 39, 255, empty)
@@ -69,9 +72,19 @@ def getproperyBinarythresh(img):
             break
     return thresh
 
+def BinaryProcessImg(img,thresh):
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    ret,img_ret = cv2.threshold(img,thresh,255,cv2.THRESH_BINARY)
+    ret,img_ret_inv = cv2.threshold(img,thresh,255,cv2.THRESH_BINARY_INV)
+    return img_ret,img_ret_inv
+
 if __name__ == "__main__":
     img_primary = cv2.imread("pics/wyh3.jpg")
     processed_path = "pics_processed/wyh3_segman.jpg"
     img_face,face_pos = get_face_and_pos(img_primary)
     thresh = getproperyBinarythresh(img_face)
-    print(thresh)
+
+    img_face_binary,img_face_binary_inv = BinaryProcessImg(img_face,thresh)
+    ret = stackImages(1.5,[[img_face_binary,img_face_binary_inv]])
+    cv2.imwrite("pics_processed/20210205/wyh_face_binary.jpg",img_face_binary)
+    plt_show(ret)
