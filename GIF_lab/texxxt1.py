@@ -4,21 +4,21 @@ import imageio
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw, ImageFont
 
-def frame_addtext(img,text):
+def frame_addtext(img,text,size):
 	# cv2 读取处理过的emoji图片
 	Pilimg = Image.fromarray(img)
 	draw = ImageDraw.Draw(Pilimg)
 	# 字体的高度会随着size大小而变化，size = 60 的时候， 高度为58
-	font = ImageFont.truetype('simhei.ttf', 60)
+	font = ImageFont.truetype('simhei.ttf', size)
 	# 文字居中处理
 	fsize = font.getsize(text)
 	text_anchor_y = img.shape[0]  - fsize[1]//2 - 58
 	text_anchor_x = (img.shape[1] - fsize[0]) // 2
 	# text_anchor_x,y 获得左上角的坐标，现在每个字体的长宽为 60 X 58
-	color_list = ["red","blue","yellow","pink"]
+	color_list = ["red","blue","yellow","pink","black","orange","green"]
 	text_list = list(text)
 	for i in range(len(text_list)):
-		draw.text((text_anchor_x + i*60, text_anchor_y), text_list[i], font=font, fill=color_list[i])
+		draw.text((text_anchor_x + i*size, text_anchor_y), text_list[i], font=font, fill=color_list[i])
 	# draw.text((text_anchor_x, text_anchor_y), text, font=font, fill=0)
 	emoji_text = cv2.cvtColor(np.array(Pilimg), cv2.COLOR_RGB2BGR)
 
@@ -40,9 +40,9 @@ def read_video(video_path):
 		if frame_count > 25:
 			if (frame_count % 4) > 2:
 				frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-			frame_text = frame_addtext(frame,"无限猖狂")
+			frame_text = frame_addtext(frame,"她微笑",60)
 		else:
-			frame_text = frame_addtext(frame,"哥是现皇")
+			frame_text = frame_addtext(frame,"As丶各种变态",40)
 		all_frames.append(frame_text)
 		cv2.imshow('frame', frame)
 		cv2.waitKey(1)
@@ -56,7 +56,7 @@ def read_video(video_path):
 
 
 def frame_to_gif(frame_list):
-	gif = imageio.mimsave('./pure_exp03.gif', frame_list, 'GIF',duration = 0.05)  # 0.05
+	gif = imageio.mimsave('./pure_exp04.gif', frame_list, 'GIF',duration = 0.05)  # 0.05
 
 
 if __name__ == "__main__":
